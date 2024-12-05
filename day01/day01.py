@@ -40,9 +40,9 @@ def find_similarity_score(input_file: str) -> int:
 
 if __name__ == '__main__':
     print('===== DAY 1, PUZZLE 1 =====')
-    print('The test input result is ', find_sum_of_distances('p1_test_input.txt'))
-    print('The main input result is ', find_sum_of_distances('p1_input.txt'))
+    print('The test input result is ', find_sum_of_distances('test_input.txt'))
+    print('The main input result is ', find_sum_of_distances('input.txt'))
 
     print('\n\n===== DAY 1, PUZZLE 2 =====')
-    print('The test input result is ', find_similarity_score('p1_test_input.txt'))
-    print('The main input result is ', find_similarity_score('p1_input.txt'))
+    print('The test input result is ', find_similarity_score('test_input.txt'))
+    print('The main input result is ', find_similarity_score('input.txt'))
