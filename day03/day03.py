@@ -9,7 +9,7 @@ def mul(x, y):
 def read_file(filename: str) -> str:
     with open(filename, "r") as file:
         lines = file.readlines()
-    return ''.join(lines)
+    return ''.join(line.strip() for line in lines)
 
 def get_valid_operations(memory: str) -> List[str]:
     return re.findall(r'mul\(\d{1,3},\d{1,3}\)', memory)
