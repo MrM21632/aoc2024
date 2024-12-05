@@ -1,5 +1,5 @@
 import collections
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
 
 
 def read_file(filename: str) -> List[str]:
@@ -7,15 +7,16 @@ def read_file(filename: str) -> List[str]:
         lines = file.readlines()
     return lines
 
-def construct_rules_graph(rules_file: str) -> Dict[int, List[int]]:
+def construct_rules_graph(rules_file: str) -> Tuple[Dict[int, Set[int]], Dict[int, int]]:
     # Defaultdict allows us to correctly handle the deepest child nodes
     # (i.e., who have no children themselves) down the line.
-    graph = collections.defaultdict(list)
+    graph = collections.defaultdict(set)
 
     lines = read_file(rules_file)
     for line in lines:
         values = line.split('|')
-        graph[int(values[0])].append(int(values[1]))
+        first, second = int(values[0]), int(values[1])
+        graph[first].add(second)
     return graph
 
 def construct_updates(updates_file: str) -> List[List[int]]:
@@ -25,7 +26,7 @@ def construct_updates(updates_file: str) -> List[List[int]]:
         result.append(list(map(int, line.split(','))))
     return result
 
-def group_updates(graph: Dict[int, List[int]], updates: List[List[int]]) -> Tuple[List[List[int]], List[List[int]]]:
+def group_updates(graph: Dict[int, Set[int]], updates: List[List[int]]) -> Tuple[List[List[int]], List[List[int]]]:
     correct, incorrect = [], []
     for u in updates:
         valid = True
@@ -39,17 +40,20 @@ def group_updates(graph: Dict[int, List[int]], updates: List[List[int]]) -> Tupl
             incorrect.append(u)
     return correct, incorrect
 
+def fix_update(graph: Dict[int, Set[int]], update: List[int]) -> List[int]:
+    for i, page in enumerate(update[:-1]):
+        errors = graph[page].intersection(update[i + 1:])
+        if errors:
+            update[i:] = list(errors) + [x for x in update[i:] if x not in errors]
+            return fix_update(graph, update)
+    return update
+
 def get_sum_of_middles(rules_file: str, updates_file: str) -> int:
     graph = construct_rules_graph(rules_file)
     updates = construct_updates(updates_file)
 
     correct, _ = group_updates(graph, updates)
-    total = 0
-    for c in correct:
-        if len(c) % 2 == 0:
-            total += c[len(c) // 2 - 1]
-        else:
-            total += c[len(c) // 2]
+    total = sum(c[len(c) // 2] for c in correct)
     return total
 
 def get_sum_of_fixed_middles(rules_file: str, updates_file: str) -> int:
@@ -59,8 +63,8 @@ def get_sum_of_fixed_middles(rules_file: str, updates_file: str) -> int:
     _, incorrect = group_updates(graph, updates)
     total = 0
     for i in incorrect:
-        # TODO: Correctly order the list, find its middle
-        pass
+        corrected = fix_update(graph, i)
+        total += corrected[len(corrected) // 2]
     return total
 
 
