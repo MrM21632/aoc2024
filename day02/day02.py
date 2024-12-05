@@ -42,10 +42,10 @@ def count_safe_reports_with_dampening(input_file: str) -> int:
 
 
 if __name__ == '__main__':
-    print('===== DAY 1, PUZZLE 1 =====')
+    print('===== DAY 2, PUZZLE 1 =====')
     print('The test input result is ', count_safe_reports('test_input.txt'))
     print('The main input result is ', count_safe_reports('input.txt'))
 
-    print('\n\n===== DAY 1, PUZZLE 2 =====')
+    print('\n\n===== DAY 2, PUZZLE 2 =====')
     print('The test input result is ', count_safe_reports_with_dampening('test_input.txt'))
     print('The main input result is ', count_safe_reports_with_dampening('input.txt'))
