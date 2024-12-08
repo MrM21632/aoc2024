@@ -20,51 +20,43 @@ def find_nodes(grid: List[List[str]]) -> Dict[str, List[Tuple[int, int]]]:
                 result[grid[i][j]].append((i, j))
     return result
 
-def find_antinodes(input_file: str) -> int:
+def find_antinodes_and_harmonics(input_file: str) -> Tuple[int, int]:
     grid = get_grid(input_file)
     m, n = len(grid), len(grid[0])
     node_positions = find_nodes(grid)
 
     valid = lambda r, c: 0 <= r < m and 0 <= c < n
-    antinodes = set()
-    for positions in node_positions.values():
-        for (ax, ay), (bx, by) in itertools.combinations(positions, 2):
-            cx, cy = ax - (bx - ax), ay - (by - ay)
-            if valid(cx, cy):
-                antinodes.add((cx, cy))
-            dx, dy = bx + (bx - ax), by + (by - ay)
-            if valid(dx, dy):
-                antinodes.add((dx, dy))
-    return len(antinodes)
-
-def find_harmonics(input_file: str) -> int:
-    grid = get_grid(input_file)
-    m, n = len(grid), len(grid[0])
-    node_positions = find_nodes(grid)
-
-    valid = lambda r, c: 0 <= r < m and 0 <= c < n
-    harmonics = set()
+    antinodes, harmonics = set(), set()
     for positions in node_positions.values():
         for (ax, ay), (bx, by) in itertools.combinations(positions, 2):
             harmonics.update([(ax, ay), (bx, by)])
             cx, cy = ax - (bx - ax), ay - (by - ay)
+            dx, dy = bx + (bx - ax), by + (by - ay)
+
+            if valid(cx, cy):
+                antinodes.add((cx, cy))
             while valid(cx, cy):
                 harmonics.add((cx, cy))
                 cx -= (bx - ax)
                 cy -= (by - ay)
-            dx, dy = bx + (bx - ax), by + (by - ay)
+
+            if valid(dx, dy):
+                antinodes.add((dx, dy))
             while valid(dx, dy):
                 harmonics.add((dx, dy))
                 dx += (bx - ax)
                 dy += (by - ay)
-    return len(harmonics)
+    return len(antinodes), len(harmonics)
 
 
 if __name__ == '__main__':
+    input_results = find_antinodes_and_harmonics('input.txt')
+    test_input_results = find_antinodes_and_harmonics('test_input.txt')
+
     print('===== DAY 8, PUZZLE 1 =====')
-    print('The test input result is ', find_antinodes('test_input.txt'))
-    print('The main input result is ', find_antinodes('input.txt'))
+    print('The test input result is ', test_input_results[0])
+    print('The main input result is ', input_results[0])
 
     print('\n\n===== DAY 8, PUZZLE 2 =====')
-    print('The test input result is ', find_harmonics('test_input.txt'))
-    print('The main input result is ', find_harmonics('input.txt'))
+    print('The test input result is ', test_input_results[1])
+    print('The main input result is ', input_results[1])
