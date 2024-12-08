@@ -30,6 +30,7 @@ def find_antinodes_and_harmonics(input_file: str) -> Tuple[int, int]:
     for positions in node_positions.values():
         for (ax, ay), (bx, by) in itertools.combinations(positions, 2):
             harmonics.update([(ax, ay), (bx, by)])
+            # Positions are naturally ordered, which makees the math simpler
             cx, cy = ax - (bx - ax), ay - (by - ay)
             dx, dy = bx + (bx - ax), by + (by - ay)
 
