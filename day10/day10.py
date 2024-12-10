@@ -37,10 +37,7 @@ def get_score_for_trailhead(grid: List[List[int]], start: Tuple[int, int], part2
     while queue:
         r, c = queue.popleft()
         if grid[r][c] == TRAIL_END:
-            if part2:
-                score += 1
-            else:
-                score += (1 if (r, c) not in visited else 0)
+            score += (1 if part2 or (r, c) not in visited else 0)
             visited.add((r, c))
             continue
         
