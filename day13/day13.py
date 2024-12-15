@@ -36,6 +36,7 @@ def reach_prize(machine: ClawMachine, part2: bool = False) -> Tuple[int, int]:
     # (A button deltas), (B button deltas), (prize coords)
     (a, b), (c, d), (e, f) = machine
     if part2:
+        # Whoops, I guess we were 10 trillion off lmao
         e += CORRECTION
         f += CORRECTION
 
@@ -67,7 +68,6 @@ def compute_total_tokens(input_file: str, part2: bool = False) -> int:
 
 if __name__ == '__main__':
     print('===== DAY 13, PUZZLE 1 =====')
-    # This will not match the test answer because we're now working with the full grid
     print('The test input result is ', compute_total_tokens('test_input.txt'))
     print('The main input result is ', compute_total_tokens('input.txt'))
 
