@@ -55,10 +55,10 @@ def compute_score_total(input_file: str, part2: bool = False) -> int:
 
 
 if __name__ == '__main__':
-    print('===== DAY 9, PUZZLE 1 =====')
+    print('===== DAY 10, PUZZLE 1 =====')
     print('The test input result is ', compute_score_total('test_input.txt'))
     print('The main input result is ', compute_score_total('input.txt'))
 
-    print('\n\n===== DAY 9, PUZZLE 2 =====')
+    print('\n\n===== DAY 10, PUZZLE 2 =====')
     print('The test input result is ', compute_score_total('test_input.txt', True))
     print('The main input result is ', compute_score_total('input.txt', True))

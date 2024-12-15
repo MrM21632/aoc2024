@@ -36,10 +36,10 @@ def perform_blinks(input_file: str, blinks: int) -> int:
 
 
 if __name__ == '__main__':
-    print('===== DAY 9, PUZZLE 1 =====')
+    print('===== DAY 11, PUZZLE 1 =====')
     print('The test input result is ', perform_blinks('test_input.txt', 25))
     print('The main input result is ', perform_blinks('input.txt', 25))
 
-    print('\n\n===== DAY 9, PUZZLE 2 =====')
+    print('\n\n===== DAY 11, PUZZLE 2 =====')
     print('The test input result is ', perform_blinks('test_input.txt', 75))
     print('The main input result is ', perform_blinks('input.txt', 75))
