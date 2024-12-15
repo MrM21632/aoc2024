@@ -1,5 +1,5 @@
 import re
-from typing import cast, Optional, List, Tuple, TypeAlias
+from typing import cast, List, Tuple, TypeAlias
 
 
 Pair: TypeAlias = Tuple[int, int]
@@ -9,6 +9,7 @@ ClawMachine: TypeAlias = List[Pair]  # [A, B, Prize]
 NUMBERS = re.compile(r"(\d+).+?(\d+)")
 A_TOKENS = 3
 B_TOKENS = 1
+CORRECTION = 10_000_000_000_000
 
 
 def read_file(filename: str) -> List[str]:
@@ -31,9 +32,12 @@ def get_claw_machines(input_file: str) -> List[ClawMachine]:
         result.append(cast(ClawMachine, [button_a, button_b, prize]))
     return result
 
-def reach_prize(machine: ClawMachine) -> Tuple[int, int]:
+def reach_prize(machine: ClawMachine, part2: bool = False) -> Tuple[int, int]:
     # (A button deltas), (B button deltas), (prize coords)
     (a, b), (c, d), (e, f) = machine
+    if part2:
+        e += CORRECTION
+        f += CORRECTION
 
     # Cramer's Rule to the rescue. We have a system of equations that we can
     # pretty quickly solve. All we need to do is compute the following:
@@ -50,12 +54,12 @@ def reach_prize(machine: ClawMachine) -> Tuple[int, int]:
         return (-1, -1)
     return (a_presses, b_presses)
 
-def compute_total_tokens(input_file: str) -> int:
+def compute_total_tokens(input_file: str, part2: bool = False) -> int:
     machines = get_claw_machines(input_file)
 
     result = 0
     for machine in machines:
-        a_presses, b_presses = reach_prize(machine)
+        a_presses, b_presses = reach_prize(machine, part2)
         if a_presses != -1 and b_presses != -1:
             result += (A_TOKENS * a_presses + B_TOKENS * b_presses)
     return result
@@ -68,5 +72,5 @@ if __name__ == '__main__':
     print('The main input result is ', compute_total_tokens('input.txt'))
 
     print('\n\n===== DAY 13, PUZZLE 2 =====')
-    print('The test input result is ', compute_total_tokens('test_input.txt'))
-    print('The main input result is ', compute_total_tokens('input.txt'))
+    print('The test input result is ', compute_total_tokens('test_input.txt', True))
+    print('The main input result is ', compute_total_tokens('input.txt', True))
