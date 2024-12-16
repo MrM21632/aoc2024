@@ -104,4 +104,4 @@ if __name__ == '__main__':
 
     print('\n\n===== DAY 15, PUZZLE 2 =====')
     print('The first test input result is ', get_sum_of_coords('test_input1.txt'))  # 9021
-    # print('The main input result is ', get_sum_of_coords('input.txt'))
+    print('The main input result is ', get_sum_of_coords('input.txt'))
