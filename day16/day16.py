@@ -19,6 +19,7 @@ TURN_SCORE = 1000
 
 cw = lambda i: (i + 1) % 4
 ccw = lambda i: (i + 3) % 4
+flip = lambda i: (i + 2) % 4
 
 
 def read_file(filename: str) -> List[str]:
@@ -58,7 +59,7 @@ def dijkstra(grid: List[List[str]], starts: List[Tuple[int, int, int]]) -> dict:
         if distances[(r, c, d)] < dist:
             continue
 
-        # Account for turns
+        # Account for turns. Remember we can only turn 90 degrees CW/CCW at a time
         for nd in (cw(d), ccw(d)):
             if (r, c, nd) not in distances or distances[(r, c, nd)] > dist + 1000:
                 distances[(r, c, nd)] = dist + 1000
@@ -80,12 +81,39 @@ def find_minimum_score(input_file: str) -> int:
     grid = parse_grid(input_file)
     (sr, sc), (er, ec) = find_start_and_end_points(grid)
 
+    # Part 1 is literally just an application of Dijkstra's algorithm. Find the most
+    # optimal path from start to target.
     distances = dijkstra(grid, [(sr, sc, 0)])
     best_distance = sys.maxsize
     for d in range(4):
         if (er, ec, d) in distances:
             best_distance = min(best_distance, distances[(er, ec, d)])
     return best_distance
+
+
+def find_total_best_tiles(input_file: str) -> int:
+    grid = parse_grid(input_file)
+    (sr, sc), (er, ec) = find_start_and_end_points(grid)
+
+    distances_from_start = dijkstra(grid, [(sr, sc, 0)])
+    distances_from_end = dijkstra(grid, [(er, ec, d) for d in range(4)])
+    best_distance = find_minimum_score(input_file)
+
+    # Basic idea: We know the optimal path(s) from the start and target cells. We know the
+    # shortest path from Part 1. If a given cell is along the best path(s), then the
+    # distance to that cell from the start and target cells should add up to the shortest
+    # path's distance.
+    best_tiles = set()
+    for r in range(len(grid)):
+        for c in range(len(grid[0])):
+            for d in range(4):
+                # flip() produces the opposite direction; this is because we'll be coming
+                # from opposite directions between the start and target cells.
+                sk, ek = (r, c, d), (r, c, flip(d))
+                if sk in distances_from_start and ek in distances_from_end:
+                    if distances_from_start[sk] + distances_from_end[ek] == best_distance:
+                        best_tiles.add((r, c))
+    return len(best_tiles)
 
 
 if __name__ == '__main__':
@@ -95,6 +123,6 @@ if __name__ == '__main__':
     print('The main input result is ', find_minimum_score('input.txt'))
 
     print('\n\n===== DAY 16, PUZZLE 2 =====')
-    # print('The first test input result is ', get_sum_of_coords('test_input1.txt'))
-    # print('The second test input result is ', get_sum_of_coords('test_input2.txt'))
-    # print('The main input result is ', get_sum_of_coords('input.txt'))
+    print('The first test input result is ', find_total_best_tiles('test_input1.txt'))   # 45
+    print('The second test input result is ', find_total_best_tiles('test_input2.txt'))  # 64
+    print('The main input result is ', find_total_best_tiles('input.txt'))
