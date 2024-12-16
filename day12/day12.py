@@ -54,13 +54,30 @@ def compute_perimeter(region: Set[Pair]) -> int:
                 result += 1
     return result
 
-def get_price_of_fencing(input_file: str) -> int:
+def count_sides(region: Set[Pair]) -> int:
+    perimeter = set()
+    for r, c in region:
+        for dr, dc in DIRS:
+            if (r + dr, c + dc) not in region:
+                perimeter.add((r, c))
+    
+    sides = 0
+    while perimeter:
+        r, c = perimeter.pop()
+        sides += 1
+
+        for dr, dc in [(1, 0), (0, 1)]:
+            if (r + dr, c + dc) in perimeter:
+                perimeter.remove((r + dr, c + dc))
+    return sides
+
+def get_price_of_fencing(input_file: str, part2: bool = False) -> int:
     grid = parse_grid(input_file)
     regions = find_regions(grid)
 
     total_price = 0
     for region in regions:
-        total_price += len(region) * compute_perimeter(region)
+        total_price += len(region) * (count_sides(region) if part2 else compute_perimeter(region))
     return total_price
 
 
@@ -70,5 +87,5 @@ if __name__ == '__main__':
     print('The main input result is ', get_price_of_fencing('input.txt'))
 
     print('\n\n===== DAY 12, PUZZLE 2 =====')
-    print('The test input result is ', get_price_of_fencing('test_input.txt'))
-    print('The main input result is ', get_price_of_fencing('input.txt'))
+    print('The test input result is ', get_price_of_fencing('test_input.txt', True))
+    print('The main input result is ', get_price_of_fencing('input.txt', True))
