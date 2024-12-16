@@ -91,13 +91,12 @@ def find_minimum_score(input_file: str) -> int:
     return best_distance
 
 
-def find_total_best_tiles(input_file: str) -> int:
+def find_total_best_tiles(input_file: str, best_distance: int) -> int:
     grid = parse_grid(input_file)
     (sr, sc), (er, ec) = find_start_and_end_points(grid)
 
     distances_from_start = dijkstra(grid, [(sr, sc, 0)])
     distances_from_end = dijkstra(grid, [(er, ec, d) for d in range(4)])
-    best_distance = find_minimum_score(input_file)
 
     # Basic idea: We know the optimal path(s) from the start and target cells. We know the
     # shortest path from Part 1. If a given cell is along the best path(s), then the
@@ -118,11 +117,14 @@ def find_total_best_tiles(input_file: str) -> int:
 
 if __name__ == '__main__':
     print('===== DAY 16, PUZZLE 1 =====')
-    print('The first test input result is ', find_minimum_score('test_input1.txt'))   # 7036
-    print('The second test input result is ', find_minimum_score('test_input2.txt'))  # 11048
-    print('The main input result is ', find_minimum_score('input.txt'))
+    test1_optimal = find_minimum_score('test_input1.txt')
+    test2_optimal = find_minimum_score('test_input2.txt')
+    input_optimal = find_minimum_score('input.txt')
+    print('The first test input result is ', test1_optimal)   # 7036
+    print('The second test input result is ', test2_optimal)  # 11048
+    print('The main input result is ', input_optimal)
 
     print('\n\n===== DAY 16, PUZZLE 2 =====')
-    print('The first test input result is ', find_total_best_tiles('test_input1.txt'))   # 45
-    print('The second test input result is ', find_total_best_tiles('test_input2.txt'))  # 64
-    print('The main input result is ', find_total_best_tiles('input.txt'))
+    print('The first test input result is ', find_total_best_tiles('test_input1.txt', test1_optimal))   # 45
+    print('The second test input result is ', find_total_best_tiles('test_input2.txt', test2_optimal))  # 64
+    print('The main input result is ', find_total_best_tiles('input.txt', input_optimal))
