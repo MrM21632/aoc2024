@@ -45,15 +45,15 @@ class Computer:
             return 0
 
     def adv(self, operand: int) -> None:
-        self.registers[0] = self.registers[0] // (2 ** self.get_operand_value(operand))
+        self.registers[0] = self.registers[0] >> self.get_operand_value(operand)
         self.instruction_pointer += 2
     
     def bdv(self, operand: int) -> None:
-        self.registers[1] = self.registers[0] // (2 ** self.get_operand_value(operand))
+        self.registers[1] = self.registers[0] >> self.get_operand_value(operand)
         self.instruction_pointer += 2
     
     def cdv(self, operand: int) -> None:
-        self.registers[2] = self.registers[0] // (2 ** self.get_operand_value(operand))
+        self.registers[2] = self.registers[0] >> self.get_operand_value(operand)
         self.instruction_pointer += 2
     
     def bxl(self, operand: int) -> None:
