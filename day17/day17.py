@@ -97,13 +97,17 @@ def execute_program(input_file: str) -> str:
     computer = get_computer(input_file)
     return computer.run()
 
+def find_smallest_value_for_register(input_file: str) -> int:
+    pass
+
 
 if __name__ == '__main__':
     print('===== DAY 17, PUZZLE 1 =====')
     # 4,6,3,5,6,3,5,2,1,0
-    print('The first test input result is ', execute_program('test_input.txt'))
+    print('The first test input result is ', execute_program('test_input1.txt'))
     print('The main input result is ', execute_program('input.txt'))
 
     print('\n\n===== DAY 17, PUZZLE 2 =====')
-    print('The first test input result is ', execute_program('test_input.txt'))
-    print('The main input result is ', execute_program('input.txt'))
+    # 117440
+    print('The first test input result is ', find_smallest_value_for_register('test_input2.txt'))
+    print('The main input result is ', find_smallest_value_for_register('input.txt'))
