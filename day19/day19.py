@@ -109,7 +109,6 @@ def count_ways_to_make_towels(input_file: str) -> int:
     return sum(count_ways(towel) for towel in towels)
 
 
-
 if __name__ == '__main__':
     print('===== DAY 19, PUZZLE 1 =====')
     print('The test input result is ', count_possible_towels('test_input.txt'))  # 6
