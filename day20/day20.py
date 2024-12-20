@@ -1,5 +1,5 @@
 import collections
-from typing import List, Tuple, TypeAlias
+from typing import Set, Tuple, TypeAlias
 
 
 START = 'S'
@@ -18,28 +18,28 @@ CHEAT_DIRS = [
 
 
 Pair: TypeAlias = Tuple[int, int]
-Grid: TypeAlias = List[List[str]]
 
 
-def get_grid(filename: str) -> Tuple[Grid, Pair, Pair]:
+def get_path(filename: str) -> Tuple[Set[Pair], Pair, Pair]:
     with open(filename, 'r') as file:
         lines = [l for l in file.readlines() if l.strip()]
-    
-    grid = [list(line.strip()) for line in lines]
+
+    # Key observation: There's only one path from S to E. We don't need a full
+    # grid structure, just the points along the path.
+    path = set()
     start, end = None, None
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if grid[i][j] == START:
-                start = (i, j)
-            if grid[i][j] == END:
-                end = (i, j)
-    return grid, start, end
+    for i, line in enumerate(lines):
+        for j, c in enumerate(line):
+            if c in [EMPTY, START, END]:
+                path.add((i, j))
+                if c == START:
+                    start = (i, j)
+                if c == END:
+                    end = (i, j)
+    return path, start, end
 
 
-def traverse(grid: Grid, start: Pair, end: Pair) -> Tuple[dict, set]:
-    m, n = len(grid), len(grid[0])
-    is_valid = lambda r, c: 0 <= r < m and 0 <= c < n
-
+def traverse(path: Set[Pair], start: Pair, end: Pair) -> Tuple[dict, set]:
     distances = dict()
     visited = set()
     queue = collections.deque([(0, *start)])
@@ -55,14 +55,14 @@ def traverse(grid: Grid, start: Pair, end: Pair) -> Tuple[dict, set]:
 
         for dr, dc in DIRS:
             nr, nc = r + dr, c + dc
-            if is_valid(nr, nc) and (nr, nc) not in visited and grid[nr][nc] == EMPTY:
+            if (nr, nc) not in visited and (nr, nc) in path:
                 queue.append((d + 1, nr, nc))
     return distances, visited
 
 
 def find_best_time_saves(input_file: str, limit: int, part2: bool = False) -> int:
-    grid, start, end = get_grid(input_file)
-    distances, visited = traverse(grid, start, end)
+    path, start, end = get_path(input_file)
+    distances, visited = traverse(path, start, end)
 
     cheats = CHEAT_DIRS.copy()
     if part2:
@@ -95,4 +95,4 @@ if __name__ == '__main__':
 
     print('\n\n===== DAY 20, PUZZLE 2 =====')
     print('The test input result is ', find_best_time_saves('test_input.txt', 50, True))  # 285?
-    # print('The main input result is ', find_best_time_saves('input.txt', 100, True))
+    print('The main input result is ', find_best_time_saves('input.txt', 100, True))
