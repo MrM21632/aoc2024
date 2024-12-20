@@ -90,9 +90,9 @@ def find_best_time_saves(input_file: str, limit: int, part2: bool = False) -> in
 
 if __name__ == '__main__':
     print('===== DAY 20, PUZZLE 1 =====')
-    print('The test input result is ', find_best_time_saves('test_input.txt', 10))  # 9?
+    print('The test input result is ', find_best_time_saves('test_input.txt', 10))  # 10
     print('The main input result is ', find_best_time_saves('input.txt', 100))
 
     print('\n\n===== DAY 20, PUZZLE 2 =====')
-    print('The test input result is ', find_best_time_saves('test_input.txt', 50, True))  # 285?
+    print('The test input result is ', find_best_time_saves('test_input.txt', 50, True))  # 285
     print('The main input result is ', find_best_time_saves('input.txt', 100, True))
