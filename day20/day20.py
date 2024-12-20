@@ -1,4 +1,4 @@
-import heapq
+import collections
 from typing import List, Tuple, TypeAlias
 
 
@@ -36,16 +36,16 @@ def get_grid(filename: str) -> Tuple[Grid, Pair, Pair]:
     return grid, start, end
 
 
-def dijkstra(grid: Grid, start: Pair, end: Pair) -> Tuple[dict, set]:
+def traverse(grid: Grid, start: Pair, end: Pair) -> Tuple[dict, set]:
     m, n = len(grid), len(grid[0])
     is_valid = lambda r, c: 0 <= r < m and 0 <= c < n
 
-    distances = {start: 0}
+    distances = dict()
     visited = set()
-    heap = [(0, *start)]
+    queue = collections.deque([(0, *start)])
 
-    while heap:
-        d, r, c = heapq.heappop(heap)
+    while queue:
+        d, r, c = queue.popleft()
         if (r, c) in visited:
             continue
         distances[(r, c)] = d
@@ -56,25 +56,34 @@ def dijkstra(grid: Grid, start: Pair, end: Pair) -> Tuple[dict, set]:
         for dr, dc in DIRS:
             nr, nc = r + dr, c + dc
             if is_valid(nr, nc) and (nr, nc) not in visited and grid[nr][nc] == EMPTY:
-                heapq.heappush(heap, (d + 1, nr, nc))
+                queue.append((d + 1, nr, nc))
     return distances, visited
 
 
-def find_best_time_saves(input_file: str, limit: int) -> int:
+def find_best_time_saves(input_file: str, limit: int, part2: bool = False) -> int:
     grid, start, end = get_grid(input_file)
-    distances, visited = dijkstra(grid, start, end)
+    distances, visited = traverse(grid, start, end)
+
+    cheats = CHEAT_DIRS.copy()
+    if part2:
+        # Add new cheats with absolute distance between 3 and 20, inclusive
+        for dr in range(-20, 21):
+            for dc in range(-20, 21):
+                d = abs(dr) + abs(dc)
+                if 3 <= d <= 20:
+                    cheats.append((dr, dc))
 
     total = 0
     for r, c in visited:
         base_score = distances[(r, c)]
-        for dr, dc in CHEAT_DIRS:
+        for dr, dc in cheats:
             nr, nc = r + dr, c + dc
             if (nr, nc) not in visited:
                 continue
 
             new_score = distances[(nr, nc)]
             cheat_distance = abs(dr) + abs(dc)
-            if new_score - base_score >= limit + cheat_distance:
+            if new_score - base_score - cheat_distance >= limit:
                 total += 1
     return total
 
@@ -85,5 +94,5 @@ if __name__ == '__main__':
     print('The main input result is ', find_best_time_saves('input.txt', 100))
 
     print('\n\n===== DAY 20, PUZZLE 2 =====')
-    # print('The test input result is ', find_first_blocking_corruption('test_input.txt'))
-    # print('The main input result is ', find_first_blocking_corruption('input.txt'))
+    print('The test input result is ', find_best_time_saves('test_input.txt', 50, True))  # 285?
+    # print('The main input result is ', find_best_time_saves('input.txt', 100, True))
