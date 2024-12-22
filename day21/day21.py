@@ -69,10 +69,10 @@ def get_complexity_of_codes(input_file: str, robots: int) -> int:
 
 
 if __name__ == "__main__":
-    print('===== DAY 20, PUZZLE 1 =====')
+    print('===== DAY 21, PUZZLE 1 =====')
     print('The test input result is ', get_complexity_of_codes('test_input.txt', 3))  # 126384
     print('The main input result is ', get_complexity_of_codes('input.txt', 3))
 
-    print('\n\n===== DAY 20, PUZZLE 2 =====')
+    print('\n\n===== DAY 21, PUZZLE 2 =====')
     print('The test input result is ', get_complexity_of_codes('test_input.txt', 26))
     print('The main input result is ', get_complexity_of_codes('input.txt', 26))
