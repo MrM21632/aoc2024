@@ -97,10 +97,10 @@ def get_sum_of_coords(input_file: str) -> int:
 
 if __name__ == '__main__':
     print('===== DAY 15, PUZZLE 1 =====')
-    print('The first test input result is ', get_sum_of_coords('test_input1.txt'))   # 10092
-    print('The second test input result is ', get_sum_of_coords('test_input2.txt'))  # 2028
+    print('The first test input result is ', get_sum_of_coords('test_input1.txt'))   # 2028
+    print('The second test input result is ', get_sum_of_coords('test_input2.txt'))  # 10092
     print('The main input result is ', get_sum_of_coords('input.txt'))
 
     print('\n\n===== DAY 15, PUZZLE 2 =====')
-    print('The first test input result is ', get_sum_of_coords('test_input1.txt'))  # 9021
-    print('The main input result is ', get_sum_of_coords('input.txt'))
+    # print('The first test input result is ', get_sum_of_coords('test_input1.txt'))  # 9021
+    # print('The main input result is ', get_sum_of_coords('input.txt'))

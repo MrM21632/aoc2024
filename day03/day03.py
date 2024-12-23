@@ -44,7 +44,7 @@ def get_mul_result_with_conditionals(input_file: str) -> int:
 
 if __name__ == '__main__':
     print('===== DAY 3, PUZZLE 1 =====')
-    print('The test input result is ', get_mul_result('test_input.txt'))
+    print('The test input result is ', get_mul_result('test_input1.txt'))
     print('The main input result is ', get_mul_result('input.txt'))
 
     print('\n\n===== DAY 3, PUZZLE 2 =====')
