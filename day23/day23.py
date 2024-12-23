@@ -31,17 +31,17 @@ def find_connected_computers(input_file: str) -> int:
 def find_password_for_largest_party(input_file: str) -> int:
     graph = read_file(input_file)
 
-    def bohn_kerbosch(r, p, x):
+    def bron_kerbosch(r, p, x):
         if not p and not x:
             yield r
         else:
             for v in p.copy():
-                yield from bohn_kerbosch(r | {v}, p & graph[v], x & graph[v])
+                yield from bron_kerbosch(r | {v}, p & graph[v], x & graph[v])
                 p.remove(v)
                 x.add(v)
     
     component, complen = None, 0
-    for comp in bohn_kerbosch(set(), set(graph.keys()), set()):
+    for comp in bron_kerbosch(set(), set(graph.keys()), set()):
         if len(comp) > complen:
             component, complen = comp, len(comp)
     
