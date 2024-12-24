@@ -28,6 +28,13 @@ def perform_operation(op: str, in1: int, in2: int) -> int:
         case _:
             return 0  # Should be unreachable
 
+def combine_into_number(inputs: List[Tuple[str, int]]) -> int:
+    result = 0
+    for k, v in inputs:
+        shift = int(k[1:])
+        result |= (v << shift)
+    return result
+
 
 def simulate_gates(input_file: str) -> int:
     gates, initial_values = read_file(input_file)
@@ -46,20 +53,34 @@ def simulate_gates(input_file: str) -> int:
             del gates[s[0]]
     
     final_wire_values = [(k, v) for k, v in initial_values.items() if k.startswith('z')]
-    result = 0
-    for key, value in final_wire_values:
-        shift = int(key[1:])
-        result |= (value << shift)
-    return result
+    return combine_into_number(final_wire_values)
+
+
+def find_wires_to_swap(input_file: str) -> str:
+    _, initial_values = read_file(input_file)
+
+    x_combined, y_combined = (
+        combine_into_number([(k, v) for k, v in initial_values.items() if k.startswith('x')]),
+        combine_into_number([(k, v) for k, v in initial_values.items() if k.startswith('y')]),
+    )
+    desired_output = x_combined + y_combined
+    print(x_combined, y_combined, desired_output)
+
+    produced_output = simulate_gates(input_file)
+    print('x =', '{0:48b}'.format(x_combined))
+    print('y =', '{0:48b}'.format(y_combined))
+    print('d =', '{0:48b}'.format(desired_output))
+    print('p =', '{0:48b}'.format(produced_output))
+    print('^ =', '{0:48b}'.format(desired_output ^ produced_output))
 
 
 if __name__ == '__main__':
     print('===== DAY 24, PUZZLE 1 =====')
     print('The test input result is ', simulate_gates('test_input1.txt'))  # 4
     print('The test input result is ', simulate_gates('test_input2.txt'))  # 2024
+    print('The test input result is ', simulate_gates('test_input3.txt'))  # 9
     print('The main input result is ', simulate_gates('input.txt'))
 
     print('\n\n===== DAY 24, PUZZLE 2 =====')
-    # print('The test input result is ', simulate_gates('test_input1.txt'))
-    # print('The test input result is ', simulate_gates('test_input2.txt'))
-    # print('The main input result is ', simulate_gates('input.txt'))
+    # print('The test input result is ', find_wires_to_swap('test_input3.txt'))  # z00,z01,z02,z05
+    print('The main input result is ', find_wires_to_swap('input.txt'))
